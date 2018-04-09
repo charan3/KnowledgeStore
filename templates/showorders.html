@@ -1,0 +1,40 @@
+
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="col-md-6 well">
+<h2 align="center">Your Account Details</h2>
+<p><strong>Name:</strong>{{user.name}}</p>
+<p><strong>Registered email:</strong>{{user.email}}</p>
+<p><strong>Mobile number:</strong>{{user.phone}}</p>
+<p><strong>Address:</strong>{{user.address}}</p>
+<form method="POST">
+<button name="Your orders" class="btn btn-success" style="width: 100%">Your Orders</button>
+</form>
+</div>
+<div class="col-md-6 ">
+	{%if flag==1 %}
+	<table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Orderid</th>
+        <th>Quantity</th>
+        <th>Cost</th>
+      </tr>
+    </thead>
+    {%for i in orders %}
+    <tbody>
+      <tr>
+        <td>{{i.order_id}}</td>
+        <td>{{i.quantity}}</td>
+        <td>{{'%0.2f'| format(i.price|float)}}</td>
+      </tr>
+    </tbody>
+    {%endfor%}
+	{%endif%}
+
+	</div>
+
+
+{% endblock %}
+

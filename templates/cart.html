@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block body %}
+	{% if message=="You cannot add more then three same products at a time" %}
+		<div class="alert alert-danger"><strong>{{message}}</strong></div>
+	{% elif message=="Added successfully" %}
+		<div class="alert alert-success"><strong>{{message}}</strong></div>
+	{% endif %}
+	{%for i in customerCart%}
+	<div class="well col-md-12">
+		<img src="{{ data['items'][i.id]['volumeInfo']['imageLinks']['thumbnail']}}" class="col-md-2">
+		<div class="col-md-3">
+			<h2>{{data['items'][i.id]['volumeInfo']['title']}}</h2>
+			<br>
+			<h5>Quantity: {{i.quantity}}</h5>
+		</div>
+		<div class="col-md-4">
+			<p>
+				<span style="font-weight: bold; font-size: 20px;">Price:&nbsp</span>
+				<span style="font-size: 18px;">{{i.quantity}} x {{ data['items'][i.id]["saleInfo"]["listPrice"]["amount"] }}</span>
+				{% set total = i.quantity * data['items'][i.id]["saleInfo"]["listPrice"]["amount"] %}
+				<span style="font-size: 18px;">= {{ data['items'][i.id]["saleInfo"]["listPrice"]["currencyCode"] }} {{'%0.2f'| format(total|float)}}</span>
+				<br>
+				<br>
+			</p>
+			<p><h4>Delivery address:</h4>{{customer.address}}</p>
+		</div>
+		<div class="col-md-3">
+		{% if message=="" %}
+			<a href="/del/{{i.id}}/"><input type="submit" name="removeFromCart{{i.id}}" class="col-md-2 btn btn-warning" style="margin-bottom: 5%;float: right; vertical-align: middle;" value="Remove from Cart"></a>
+		{% endif %}
+		</div>
+	</div>
+	{% endfor %}
+	<a href="{{ url_for('payment') }}"><button type="button" name="proceedtocheckout" class="btn btn-success" style="width: 100%" value="Proceed to Checkout">Proceed to Checkout</button></a>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="col-md-3">
+    <img height="450px" width="90%"src="{{ data['items'][id]["volumeInfo"]["imageLinks"]["thumbnail"] }}"  alt="image">
+</div>
+<div class="col-md-6">
+    <h1>{{ data['items'][id]["volumeInfo"]["title"] }}</h1>
+    <p><strong>ISBN_13:</strong>{{ data['items'][id]["volumeInfo"]["industryIdentifiers"][0]["identifier"] }}</p>
+    <h4><strong>Description</strong></h4>
+    <h5><strong>Author:</strong>{{ data['items'][id]["volumeInfo"]["authors"][0] }}</h5>
+    <p>{{ data['items'][id]["volumeInfo"]["description"] }}</p>
+    <h6><strong>Page Count:</strong>{{ data['items'][id]["volumeInfo"]["pageCount"] }}</h6>
+</div>
+<div class="col-md-3 well">
+    <form method="POST" action="">
+        {% if not 'NOT_FOR_SALE' in data['items'][id]['saleInfo']['saleability'] %}
+        <h2><strong>Price:</strong>{{ data['items'][id]["saleInfo"]["listPrice"]["amount"] }}</h2>
+         <div class="input-group">
+        <span class="input-group-addon"><strong>Quantity</strong></span>
+            <select name="comp_select" class="selectpicker form-control">
+              {% for o in range(1,4) %}
+              <option value="{{ o }}">{{ o }}</option>
+              {% endfor %}
+            </select>
+         </div>
+         <p align="center">Exclusive of all taxes</p>
+        <h3 align="center" style="color: green">In Stock</h3>
+            {% if session.logged_in %}
+                <input type="submit" name="addtocart" class="btn btn-warning" style="width: 100%; margin-bottom: 5%;" value="Add to Cart">
+                {% if flag==1 %}
+                    <div class="alert alert-success">
+                      <strong>Successfully added to Cart</strong>
+                    </div>
+                {% elif flag == 2 %}
+                    <div class="alert alert-danger">
+                      <strong>Cart Limit Exceeded</strong>
+                    </div>
+                {% endif %}
+                <a href="{{url_for('payment')}}"><button type="button" name="proceedtocheckout" class="btn btn-success" style="width: 100%" value="Proceed to Checkout">Proceed to Checkout</button></a>
+            {% else %}
+                <a href="{{ url_for('login') }}"><button type="button" name="addtocart" class="btn btn-warning" style="width: 100%; margin-bottom: 5%;" value="Add to Cart">Add to Cart</button></a>
+                <a href="{{ url_for('login') }}"><button type="button" name="proceedtocheckout" class="btn btn-success" style="width: 100%" value="Proceed to Checkout">Proceed to Checkout</button></a>
+            {% endif %}
+        {% else %}
+        <p>Not available</p>
+        {% endif %}
+
+    </form>
+
+    <ul class="pager">
+    {% if id ==0 %}
+          <li class="next"><a href="/book/{{(id+1)}}">Next</a></li>
+    </ul>
+    {% elif id == (size-1) %}  
+          <li class="previous"><a href="/book/{{(id-1)}}">Previous</a></li>
+    </ul>
+    {% else %}
+          <li class="previous"><a href="/book/{{(id-1)}}">Previous</a></li>
+          <li class="next"><a href="/book/{{(id+1)}}">Next</a></li>
+    </ul>
+    {% endif %}
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="col-md-6 well">
+
+  <h3>Delivering to:</h3>
+  <p><strong>Name:</strong>{{user.name}}</p>
+  <p><strong>Registered email:</strong>{{user.email}}</p>
+<p><strong>Mobile number:</strong>{{user.phone}}</p>
+<p><strong>Address:</strong>{{user.address}}</p>
+<a href="{{ url_for('confirmation') }}"><button type="button" name="payusingcod" class="btn btn-success" style="width: 100%" value="Pay using COD">Pay using COD</button></a>
+</div>
+
+<div class="col-md-6 well">
+  {%if count > 0 %}
+    <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    {%for i in orders %}
+    <tbody>
+      <tr>
+        <td>{{data['items'][i.id]["volumeInfo"]["title"] }}</td>
+        <td>{{i.quantity}}</td>
+        <td>{{(i.quantity*i.price)}}</td>
+      </tr>
+    </tbody>
+    {%endfor%}
+         <tbody>
+      <tr>
+        <td>SGST</td>
+        <td>14%</td>
+        <td>{{'%0.2f'| format(sgst|float)}}</td>
+      </tr>
+    </tbody>
+     <tbody>
+      <tr>
+        <td>CGST</td>
+        <td>14%</td>
+        <td>{{'%0.2f'| format(cgst|float)}}</td>
+      </tr>
+    </tbody>
+      <tbody>
+      <tr>
+        <td><strong>Total:<strong></td>
+        <td></td>
+        <td><strong>{{'%0.2f'| format((cost+cgst+sgst)|float)}}</strong></td>
+      </tr>
+    </tbody>
+  </table>
+  {%else%}
+  <h2 align="center">Cart is Empty</h2>
+  {%endif%}
+</div>
+
+{% endblock %}

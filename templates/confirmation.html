@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="col-md-2">
+</div>
+<div class="col-md-8 well">
+	<div align="center" class="alert alert-success">
+  <strong >Success! You have placed your order successfully</strong> <br>ThankYou for shopping with us
+</div>
+<h2 align="center">Order Summary</h2>
+
+
+{%if count > 0 %}
+<h3>Order Id:{{corder.order_id}}</h3>
+    <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    {%for i in orders %}
+    <tbody>
+      <tr>
+        <td>{{data['items'][i.id]["volumeInfo"]["title"] }}</td>
+        <td>{{i.quantity}}</td>
+        <td>{{(i.quantity*i.price)}}</td>
+      </tr>
+    </tbody>
+    {%endfor%}
+     <tbody>
+      <tr>
+        <td>SGST</td>
+        <td>14%</td>
+        <td>{{'%0.2f'| format(sgst|float)}}</td>
+      </tr>
+    </tbody>
+     <tbody>
+      <tr>
+        <td>CGST</td>
+        <td>14%</td>
+        <td>{{'%0.2f'| format(cgst|float)}}</td>
+      </tr>
+    </tbody>
+      <tbody>
+      <tr>
+        <td><strong>Total:<strong></td>
+        <td></td>
+        <td><strong>{{'%0.2f'| format((cost+cgst+sgst)|float)}}</strong></td>
+      </tr>
+    </tbody>
+
+
+  </table>
+  {%else%}
+  <h2 align="center">Cart is Empty</h2>
+  {%endif%}
+
+<button type="button" class="btn btn-primary btn-md"onclick="myFunction()">Print</button>
+</div>
+<div class="col-md-2">
+</div>
+
+{% endblock %}
